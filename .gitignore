@@ -42,3 +42,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/lib/ui/location_state.freezed.dart
+/lib/ui/location_state.g.dart
+/lib/ui/location_view_model.g.dart
+/lib/ui/location/location_state.freezed.dart
+/lib/ui/location/location_state.g.dart
+/lib/ui/location/location_view_model.g.dart
+/lib/ui/start/location_permission.g.dart
+/lib/ui/start/start_view_model.g.dart
