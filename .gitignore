@@ -50,3 +50,6 @@ app.*.map.json
 /lib/ui/location/location_view_model.g.dart
 /lib/ui/start/location_permission.g.dart
 /lib/ui/start/start_view_model.g.dart
+/lib/data/model/location_model.freezed.dart
+/lib/data/model/location_model.g.dart
+/lib/app_container.g.dart

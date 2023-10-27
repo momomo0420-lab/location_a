@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location_trial/ui/start/start_body.dart';
 import 'package:location_trial/ui/start/start_view_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class StartScreen extends ConsumerWidget {
   final Function()? _navigateToNextScreen;

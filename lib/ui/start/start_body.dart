@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:location_trial/ui/start/start_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';

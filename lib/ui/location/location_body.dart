@@ -27,8 +27,8 @@ class LocationBody extends StatelessWidget {
         const SizedBox(height: 16.0,),
 
         ElevatedButton(
-          onPressed: () => _viewModel.determinePosition(
-            (position) => _viewModel.setPosition(position),
+          onPressed: () => _viewModel.getCurrentLocation(
+            (location) => _viewModel.setLocation(location),
             () => null,
             (error) => debugPrint('LocationApp[LocationBody]: $error'),
           ),
