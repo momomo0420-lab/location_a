@@ -1,15 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:location_trial/data/model/location_model.dart';
 
 part 'location_state.freezed.dart';
 
 @freezed
 class LocationState with _$LocationState {
   const factory LocationState({
-    @Default(0.0)
-    double latitude,
-    @Default(0.0)
-    double longitude,
-    @Default('')
-    String place,
+    @Default(<LocationModel>[])
+    List<LocationModel> locations,
   }) = _LocationState;
 }

@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:location_trial/data/dao/location_dao.dart';
 import 'package:location_trial/data/dao/location_handler.dart';
 import 'package:location_trial/data/model/location_model.dart';
@@ -27,8 +28,7 @@ class LocationRepositoryImpl implements LocationRepository {
 
   @override
   Future<void> deleteBy(int id) async {
-    // TODO: implement deleteBy
-    throw UnimplementedError();
+    await _dao.deleteBy(id);
   }
 
   @override
@@ -53,14 +53,25 @@ class LocationRepositoryImpl implements LocationRepository {
   Future<LocationModel> getCurrentLocation() async {
     final currentPosition = await _handler.getCurrentPosition();
 
-    final location = LocationModel(
-      latitude: currentPosition?.latitude ?? 0,
-      longitude: currentPosition?.longitude ?? 0,
+    final longitude = currentPosition?.longitude ?? 0;
+    final latitude = currentPosition?.latitude ?? 0;
+
+    final place = await _getPlace(longitude, latitude);
+
+    return LocationModel(
+      latitude: latitude,
+      longitude: longitude,
+      place: place,
       createAt: DateTime.now().millisecondsSinceEpoch,
     );
+  }
 
-    final id = await insert(location);
-
-    return location.copyWith(id: id);
+  Future<String> _getPlace(
+    double longitude,
+    double latitude,
+  ) async {
+    final placeMarks = await placemarkFromCoordinates(latitude, longitude);
+    final place = placeMarks[0].street;
+    return (place != null)? place : '';
   }
 }

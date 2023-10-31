@@ -5,6 +5,7 @@ enum LocationDatabaseColumns {
   id('id'),
   latitude('latitude'),
   longitude('longitude'),
+  place('place'),
   createAt('create_at'),
   ;
 
@@ -50,6 +51,7 @@ class DatabaseHelper {
         ${LocationDatabaseColumns.id.column} INTEGER PRIMARY KEY AUTOINCREMENT,
         ${LocationDatabaseColumns.latitude.column} REAL,
         ${LocationDatabaseColumns.longitude.column} REAL,
+        ${LocationDatabaseColumns.place.column} TEXT,
         ${LocationDatabaseColumns.createAt.column} INTEGER
       )
     ''');

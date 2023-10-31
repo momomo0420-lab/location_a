@@ -23,8 +23,12 @@ class LocationDaoImpl implements LocationDao {
 
   @override
   Future<void> deleteBy(int id) async {
-    // TODO: implement deleteBy
-    throw UnimplementedError();
+    final db = await _dbHelper.db;
+    await db.delete(
+      DatabaseHelper.tableName,
+      where: 'id = ?',
+      whereArgs: [id]
+    );
   }
 
   @override

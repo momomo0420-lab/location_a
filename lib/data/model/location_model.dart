@@ -14,6 +14,8 @@ class LocationModel with _$LocationModel {
     double latitude,
     @Default(0.0)
     double longitude,
+    @Default('')
+    String place,
     @Default(0)
     @JsonKey(name: 'create_at')
     int createAt,
@@ -23,7 +25,7 @@ class LocationModel with _$LocationModel {
 
   /// 時刻（DateTime）を文字列に変換する
   String getFormattedDate() {
-    return DateFormat('yyyy年MM月dd日')
+    return DateFormat('yyyy年MM月dd日 hh:mm')
         .format(DateTime.fromMillisecondsSinceEpoch(createAt));
   }
 }

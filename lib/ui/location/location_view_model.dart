@@ -1,4 +1,3 @@
-import 'package:geocoding/geocoding.dart';
 import 'package:location_trial/app_container.dart';
 import 'package:location_trial/data/model/location_model.dart';
 import 'package:location_trial/ui/location/location_state.dart';
@@ -13,29 +12,42 @@ class LocationViewModel extends _$LocationViewModel {
     return const LocationState();
   }
 
-  Future<void> setLocation(LocationModel location) async {
-    final placeMarks = await placemarkFromCoordinates(location.latitude, location.longitude);
-
-    final placeMark = placeMarks[0];
-    final place = placeMark.street;
-
-    state = state.copyWith(
-      longitude: location.longitude,
-      latitude: location.latitude,
-      place: (place != null) ? place : '',
-    );
+  void setLocations(List<LocationModel> locations) {
+    state = state.copyWith(locations: locations);
   }
 
-  Future<void> getCurrentLocation(
-    Function(LocationModel location)? onSuccess,
+  Future<void> updateLocations({
+    Function()? onSuccess,
     Function()? onLoading,
-    Function(String error)? onFailure,
-  ) async {
+    Function()? onFailure,
+  }) async {
     if(onLoading != null) onLoading();
 
     final repository = ref.read(locationRepositoryProvider);
     final location = await repository.getCurrentLocation();
 
-    if(onSuccess != null) onSuccess(location);
+    await repository.insert(location);
+    final locations = await repository.findAll();
+
+    setLocations(locations);
+
+    if(onSuccess != null) onSuccess();
+  }
+
+  Future<void> deleteLocation({
+    required int id,
+    Function()? onSuccess,
+    Function()? onLoading,
+    Function()? onFailure,
+  }) async {
+    if(onLoading != null) onLoading();
+
+    final repository = ref.read(locationRepositoryProvider);
+    await repository.deleteBy(id);
+
+    final locations = await repository.findAll();
+    setLocations(locations);
+
+    if(onSuccess != null) onSuccess();
   }
 }
