@@ -31,9 +31,10 @@ class LocationViewModel extends _$LocationViewModel {
     if(onSuccess != null) onSuccess(locations);
   }
 
-  Future<void> deleteLocation({
-    required int id,
-    Function()? onSuccess,
+  Future<void> deleteLocation(
+    int id,
+    DateModel dateModel, {
+    Function(List<LocationModel> locations)? onSuccess,
     Function()? onLoading,
     Function()? onFailure,
   }) async {
@@ -42,9 +43,8 @@ class LocationViewModel extends _$LocationViewModel {
     final repository = ref.read(locationRepositoryProvider);
     await repository.deleteBy(id);
 
-    final locations = await repository.findAll();
-    setLocations(locations);
+    final locations = await repository.findForDateRange(dateModel);
 
-    if(onSuccess != null) onSuccess();
+    if(onSuccess != null) onSuccess(locations);
   }
 }

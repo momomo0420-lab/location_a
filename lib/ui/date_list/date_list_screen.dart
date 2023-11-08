@@ -25,6 +25,9 @@ class DateListScreen extends ConsumerWidget {
           IconButton(
             onPressed: () {
               viewModel.updateLocations();
+              viewModel.getDateList(
+                onSuccess: (dateList) => viewModel.setDateList(dateList),
+              );
             },
             icon: const Icon(Icons.play_circle),
           ),

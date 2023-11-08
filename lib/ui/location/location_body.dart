@@ -34,7 +34,11 @@ class LocationBody extends StatelessWidget {
           SnackBar(content: Text('id: $idのリストが押下されました。')),
         );
       },
-      onDeleteIconTap: (id) => _viewModel.deleteLocation(id: id),
+      onDeleteIconTap: (id) => _viewModel.deleteLocation(
+        id,
+        _dateModel,
+        onSuccess: (locations) => _viewModel.setLocations(locations),
+      ),
     );
   }
 
