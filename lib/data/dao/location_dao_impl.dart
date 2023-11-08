@@ -75,7 +75,8 @@ class LocationDaoImpl implements LocationDao {
 
     return await db.query(
       DatabaseHelper.tableName,
-      where: '${LocationDatabaseColumns.createAt.column} >= ? AND ${LocationDatabaseColumns.createAt.column} < ?',
+      where: '''${LocationDatabaseColumns.createAt.column} >= ? 
+              AND ${LocationDatabaseColumns.createAt.column} < ?''',
       whereArgs: [from, to],
       orderBy: '${LocationDatabaseColumns.createAt.column} ASC',
     );
