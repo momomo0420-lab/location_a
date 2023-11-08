@@ -1,4 +1,5 @@
 import 'package:location_trial/app_container.dart';
+import 'package:location_trial/data/model/date_model.dart';
 import 'package:location_trial/data/model/location_model.dart';
 import 'package:location_trial/ui/location/location_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,22 +17,18 @@ class LocationViewModel extends _$LocationViewModel {
     state = state.copyWith(locations: locations);
   }
 
-  Future<void> updateLocations({
-    Function()? onSuccess,
+  Future<void> getLocationsForDateRange(
+    DateModel dateModel, {
+    Function(List<LocationModel> locations)? onSuccess,
     Function()? onLoading,
     Function()? onFailure,
   }) async {
     if(onLoading != null) onLoading();
 
     final repository = ref.read(locationRepositoryProvider);
-    final location = await repository.getCurrentLocation();
+    final locations = await repository.findForDateRange(dateModel);
 
-    await repository.insert(location);
-    final locations = await repository.findAll();
-
-    setLocations(locations);
-
-    if(onSuccess != null) onSuccess();
+    if(onSuccess != null) onSuccess(locations);
   }
 
   Future<void> deleteLocation({

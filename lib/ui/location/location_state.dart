@@ -6,7 +6,7 @@ part 'location_state.freezed.dart';
 @freezed
 class LocationState with _$LocationState {
   const factory LocationState({
-    @Default(<LocationModel>[])
-    List<LocationModel> locations,
+    @Default(null)
+    List<LocationModel>? locations,
   }) = _LocationState;
 }

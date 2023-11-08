@@ -53,4 +53,31 @@ class LocationDaoImpl implements LocationDao {
 
     return maps.first;
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> findAllDate() async {
+    final db = await _dbHelper.db;
+
+    final rows = await db.rawQuery('''
+      SELECT ${LocationDatabaseColumns.createAt.column} AS date
+      FROM ${DatabaseHelper.tableName}
+    ''');
+
+    return rows;
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> findForDateRange(
+    int from,
+    int to,
+  ) async {
+    final db = await _dbHelper.db;
+
+    return await db.query(
+      DatabaseHelper.tableName,
+      where: '${LocationDatabaseColumns.createAt.column} >= ? AND ${LocationDatabaseColumns.createAt.column} < ?',
+      whereArgs: [from, to],
+      orderBy: '${LocationDatabaseColumns.createAt.column} ASC',
+    );
+  }
 }

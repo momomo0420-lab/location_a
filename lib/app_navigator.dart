@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:location_trial/ui/date_list/date_list_screen.dart';
 import 'package:location_trial/ui/location/location_screen.dart';
 import 'package:location_trial/ui/start/start_screen.dart';
 
 enum LocationAppScreens {
   start('/start'),
+  dateList('/date_list'),
   location('/location'),
   ;
 
@@ -30,14 +32,23 @@ class AppNavigator extends StatelessWidget {
         LocationAppScreens.start.screen: (BuildContext context) {
           return StartScreen(
             navigateToNextScreen: () => Navigator.of(context).pushReplacementNamed(
+              LocationAppScreens.dateList.screen,
+            ),
+          );
+        },
+
+        LocationAppScreens.dateList.screen: (BuildContext context) {
+          return DateListScreen(
+            navigateToNextScreen: (dateModel) => Navigator.of(context).pushNamed(
               LocationAppScreens.location.screen,
+              arguments: dateModel,
             ),
           );
         },
 
         LocationAppScreens.location.screen: (BuildContext context) {
           return const LocationScreen();
-        }
+        },
       },
       initialRoute: LocationAppScreens.start.screen,
     );

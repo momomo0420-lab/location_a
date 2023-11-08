@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location_trial/data/model/date_model.dart';
 import 'package:location_trial/data/model/location_model.dart';
 import 'package:location_trial/ui/location/location_state.dart';
 import 'package:location_trial/ui/location/location_view_model.dart';
@@ -6,37 +7,46 @@ import 'package:location_trial/ui/location/location_view_model.dart';
 class LocationBody extends StatelessWidget {
   final LocationViewModel _viewModel;
   final LocationState _state;
+  final DateModel _dateModel;
 
   const LocationBody({
     super.key,
     required LocationViewModel viewModel,
     required LocationState state,
+    required DateModel dateModel,
   }): _viewModel = viewModel,
-        _state = state;
+        _state = state,
+        _dateModel = dateModel;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () => _viewModel.updateLocations(),
-          child: const Text('取得する'),
-        ),
+    if(_state.locations == null) {
+      _viewModel.getLocationsForDateRange(
+        _dateModel,
+        onSuccess: (locations) => _viewModel.setLocations(locations),
+      );
+    }
 
-        buildLocationList(
-          locations: _state.locations,
-          onTap: (id) {},
-          onDeleteIconTap: (id) => _viewModel.deleteLocation(id: id),
-        ),
-      ],
+    return buildLocationList(
+      locations: _state.locations,
+      onTap: (id) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('id: $idのリストが押下されました。')),
+        );
+      },
+      onDeleteIconTap: (id) => _viewModel.deleteLocation(id: id),
     );
   }
 
   Widget buildLocationList({
-    required List<LocationModel> locations,
+    required List<LocationModel>? locations,
     Function(int id)? onTap,
     Function(int id)? onDeleteIconTap,
   }) {
+    if(locations == null) {
+      return const Center(child: Text('Now Loading...'));
+    }
+
     final tiles = <Widget>[];
 
     for(var location in locations) {
@@ -65,14 +75,17 @@ class LocationBody extends StatelessWidget {
     Function(int id)? onDeleteIconTap,
   }) {
     return ListTile(
-      leading: const Icon(Icons.place),
+      leading: const Icon(
+        Icons.place,
+        color: Colors.red,
+      ),
       title: Text(location.getFormattedDate()),
       subtitle: Text(location.place),
       trailing: InkWell(
+        child: const Icon(Icons.delete),
         onTap: () {
           if(onDeleteIconTap != null) onDeleteIconTap(location.id ?? 0);
         },
-        child: const Icon(Icons.delete),
       ),
       onTap: () {
         if(onTap != null) onTap(location.id ?? 0);
