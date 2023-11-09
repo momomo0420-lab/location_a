@@ -22,14 +22,16 @@ class DateListScreen extends ConsumerWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text('位置情報お試しアプリ'),
         actions: [
-          IconButton(
-            onPressed: () {
-              viewModel.updateLocations();
-              viewModel.getDateList(
-                onSuccess: (dateList) => viewModel.setDateList(dateList),
-              );
-            },
-            icon: const Icon(Icons.play_circle),
+          buildPlayIconButton(
+            state.isRunning,
+            () => viewModel.updateLocations(
+              onSuccess: (dateList) {
+                viewModel.setDateList(dateList);
+                viewModel.switchIsRunning();
+              },
+              onLoading: () => viewModel.switchIsRunning(),
+            ),
+            () => null,
           ),
         ],
       ),
@@ -42,5 +44,27 @@ class DateListScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  IconButton buildPlayIconButton(
+    bool isRunning,
+    Function() onPlayIconPressed,
+    Function() onStopIconPressed,
+  ) {
+    IconButton iconButton;
+
+    if(isRunning) {
+      iconButton = IconButton(
+        onPressed: () => onStopIconPressed(),
+        icon: const Icon(Icons.stop),
+      );
+    } else {
+      iconButton = IconButton(
+        onPressed: () => onPlayIconPressed(),
+        icon: const Icon(Icons.play_arrow),
+      );
+    }
+
+    return iconButton;
   }
 }

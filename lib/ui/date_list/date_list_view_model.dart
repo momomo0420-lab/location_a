@@ -16,6 +16,12 @@ class DateListViewModel extends _$DateListViewModel {
     state = state.copyWith(dateList: dateList);
   }
 
+  void switchIsRunning() {
+    state = state.copyWith(isRunning: !state.isRunning);
+  }
+
+
+
   Future<void> getDateList({
     Function(List<DateModel> dateList)? onSuccess,
     Function()? onLoading,
@@ -30,7 +36,7 @@ class DateListViewModel extends _$DateListViewModel {
   }
 
   Future<void> updateLocations({
-    Function()? onSuccess,
+    Function(List<DateModel> dateList)? onSuccess,
     Function()? onLoading,
     Function()? onFailure,
   }) async {
@@ -38,9 +44,10 @@ class DateListViewModel extends _$DateListViewModel {
 
     final repository = ref.read(locationRepositoryProvider);
     final location = await repository.getCurrentLocation();
-
     await repository.insert(location);
 
-    if(onSuccess != null) onSuccess();
+    final dateList = await repository.findAllDate();
+
+    if(onSuccess != null) onSuccess(dateList);
   }
 }

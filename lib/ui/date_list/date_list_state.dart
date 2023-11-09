@@ -8,5 +8,7 @@ class DateListState with _$DateListState {
   const factory DateListState ({
     @Default(null)
     List<DateModel>? dateList,
+    @Default(false)
+    bool isRunning,
   }) = _DateListState;
 }
