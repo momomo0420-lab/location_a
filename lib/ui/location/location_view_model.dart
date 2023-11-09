@@ -25,7 +25,7 @@ class LocationViewModel extends _$LocationViewModel {
   }) async {
     if(onLoading != null) onLoading();
 
-    final repository = ref.read(locationRepositoryProvider);
+    final repository = await ref.read(locationRepositoryProvider.future);
     final locations = await repository.findForDateRange(dateModel);
 
     if(onSuccess != null) onSuccess(locations);
@@ -40,7 +40,7 @@ class LocationViewModel extends _$LocationViewModel {
   }) async {
     if(onLoading != null) onLoading();
 
-    final repository = ref.read(locationRepositoryProvider);
+    final repository = await ref.read(locationRepositoryProvider.future);
     await repository.deleteBy(id);
 
     final locations = await repository.findForDateRange(dateModel);

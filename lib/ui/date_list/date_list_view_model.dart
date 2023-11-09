@@ -29,7 +29,7 @@ class DateListViewModel extends _$DateListViewModel {
   }) async {
     if(onLoading != null) onLoading();
 
-    final repository = ref.read(locationRepositoryProvider);
+    final repository = await ref.read(locationRepositoryProvider.future);
     final dateList = await repository.findAllDate();
 
     if(onSuccess != null) onSuccess(dateList);
@@ -42,7 +42,7 @@ class DateListViewModel extends _$DateListViewModel {
   }) async {
     if(onLoading != null) onLoading();
 
-    final repository = ref.read(locationRepositoryProvider);
+    final repository = await ref.read(locationRepositoryProvider.future);
     final location = await repository.getCurrentLocation();
     await repository.insert(location);
 

@@ -11,27 +11,30 @@ import 'package:sqflite/sqflite.dart';
 part 'app_container.g.dart';
 
 @riverpod
-LocationDao locationDao(LocationDaoRef ref) {
-  // final a = ref.read(locationDatabaseProvider);
-
-  return LocationDaoImpl();
-}
-
-@riverpod
 LocationHandler locationHandler(LocationHandlerRef ref) {
   return LocationHandlerImpl();
-}
-
-@riverpod
-LocationRepository locationRepository(LocationRepositoryRef ref) {
-  return LocationRepositoryImpl(
-      dao: ref.read(locationDaoProvider),
-      handler: ref.read(locationHandlerProvider),
-  );
 }
 
 @riverpod
 Future<Database> locationDatabase(LocationDatabaseRef ref) async {
   final db = await DatabaseHelper().db;
   return db;
+}
+
+@riverpod
+Future<LocationDao> locationDao(LocationDaoRef ref) async {
+  final db = await ref.read(locationDatabaseProvider.future);
+
+  return LocationDaoImpl(db: db);
+}
+
+@riverpod
+Future<LocationRepository> locationRepository(LocationRepositoryRef ref) async {
+  final dao = await ref.read(locationDaoProvider.future);
+  final handler = ref.read(locationHandlerProvider);
+
+  return LocationRepositoryImpl(
+    dao: dao,
+    handler: handler,
+  );
 }

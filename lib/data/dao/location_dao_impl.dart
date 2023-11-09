@@ -3,12 +3,15 @@ import 'package:location_trial/data/database/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LocationDaoImpl implements LocationDao {
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+  final Database _db;
+
+  const LocationDaoImpl({
+    required Database db,
+  }): _db = db;
 
   @override
   Future<int> insert(Map<String, dynamic> location) async {
-    final db = await _dbHelper.db;
-    return db.insert(
+    return _db.insert(
       DatabaseHelper.tableName,
       location,
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -23,8 +26,7 @@ class LocationDaoImpl implements LocationDao {
 
   @override
   Future<void> deleteBy(int id) async {
-    final db = await _dbHelper.db;
-    await db.delete(
+    await _db.delete(
       DatabaseHelper.tableName,
       where: 'id = ?',
       whereArgs: [id]
@@ -33,9 +35,7 @@ class LocationDaoImpl implements LocationDao {
 
   @override
   Future<List<Map<String, dynamic>>> findAll() async {
-    final db = await _dbHelper.db;
-    
-    return await db.query(
+    return await _db.query(
       DatabaseHelper.tableName,
       orderBy: '${LocationDatabaseColumns.createAt.column} DESC',
     );
@@ -43,9 +43,7 @@ class LocationDaoImpl implements LocationDao {
 
   @override
   Future<Map<String, dynamic>> findBy(int id) async {
-    final db = await _dbHelper.db;
-
-    final maps = await db.query(
+    final maps = await _db.query(
       DatabaseHelper.tableName,
       where: '${LocationDatabaseColumns.id.column} = ?',
       whereArgs: [id],
@@ -56,9 +54,7 @@ class LocationDaoImpl implements LocationDao {
 
   @override
   Future<List<Map<String, dynamic>>> findAllDate() async {
-    final db = await _dbHelper.db;
-
-    final rows = await db.rawQuery('''
+    final rows = await _db.rawQuery('''
       SELECT ${LocationDatabaseColumns.createAt.column} AS date
       FROM ${DatabaseHelper.tableName}
     ''');
@@ -71,9 +67,7 @@ class LocationDaoImpl implements LocationDao {
     int from,
     int to,
   ) async {
-    final db = await _dbHelper.db;
-
-    return await db.query(
+    return await _db.query(
       DatabaseHelper.tableName,
       where: '''${LocationDatabaseColumns.createAt.column} >= ? 
               AND ${LocationDatabaseColumns.createAt.column} < ?''',
